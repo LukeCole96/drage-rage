@@ -39,4 +39,5 @@ public class KeyHandle implements MouseMotionListener, MouseListener {
     public void mouseMoved(MouseEvent e) {
         screen.mse = new Point((e.getX()) - ((Frame.size.width - Screen.myWidth)/2), (e.getY()) - ((Frame.size.height - (Screen.myHeight)) - (Frame.size.width - Screen.myWidth)/2));
     }
+
 }
