@@ -20,6 +20,7 @@ public class Screen extends JPanel implements Runnable {
     public static Save save;
     public static String missionPath = "src/main/GameEngine/gameUtilities/levels/mission1.level";
 
+    public static Point mse = new Point(0, 0);
     public static Image[] tileSet_ground = new Image[100];
     public static Image[] tileSet_air = new Image[100];
 
@@ -56,8 +57,6 @@ public class Screen extends JPanel implements Runnable {
 
         room.draw(g);
     }
-
-
 
     public void run() {
         while (gameRun) {
