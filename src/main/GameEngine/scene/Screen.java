@@ -1,6 +1,8 @@
 package main.GameEngine.scene;
 
 import main.GameEngine.gameUtilities.Save;
+import main.GameEngine.gameUtilities.controls.KeyHandle;
+import main.GameEngine.gameUtilities.controls.Store;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,22 +20,26 @@ public class Screen extends JPanel implements Runnable {
     public static int myWidth;
     public static Room room;
     public static Save save;
+    public static Store store;
     public static String missionPath = "src/main/GameEngine/gameUtilities/levels/mission1.level";
 
     public static Point mse = new Point(0, 0);
     public static Image[] tileSet_ground = new Image[100];
     public static Image[] tileSet_air = new Image[100];
+    public static Image[] tileSet_res = new Image[100];
 
     public Thread thread = new Thread(this);
 
-    public Screen() {
-        setBackground(Color.BLACK);
+    public Screen(Frame frame) {
+        frame.addMouseListener(new KeyHandle()); //frame extends listeners, to listen intoo user input - mouseover.
+        frame.addMouseMotionListener(new KeyHandle());
         thread.start();
     }
 
     public void define() {
         room = new Room();
         save = new Save();
+        store = new Store();
 
         for(int i=0; i<tileSet_ground.length; i++) {
             tileSet_ground[i] = new ImageIcon("src/resource/tileset_ground.jpg").getImage();
@@ -43,6 +49,8 @@ public class Screen extends JPanel implements Runnable {
             tileSet_air[i] = new ImageIcon("/src/resource/tileSet_air.jpg").getImage();
             tileSet_air[i] = createImage(new FilteredImageSource(tileSet_air[i].getSource(), new CropImageFilter(0, 26*i, 26, 26)));
         }
+
+        tileSet_res[0] = new ImageIcon("src/resource/cell.png").getImage();
         save.loadSave(new File(missionPath));
     }
 
@@ -53,9 +61,19 @@ public class Screen extends JPanel implements Runnable {
             define();
             isFirst = false;
         }
-        g.clearRect(0, 0, getWidth(), getHeight());
+        g.setColor(new Color(70, 70, 70)); //red green blue
+        g.fillRect(0, 0, getWidth(), getHeight()); //background rect
+        g.setColor(new Color(0,0,0));
+        g.drawLine(room.block[0][0].x-1, 0, room.block[0][0].x-1, room.block[room.worldHeight-1][0].y + room.blockSize); //draw left border line
+        g.drawLine(room.block[0][room.worldWidth-1].x + room.blockSize, 0, room.block[0][room.worldWidth-1].x + room.blockSize, room.block[room.worldHeight-1][0].y + room.blockSize); //draw right border line
+        g.drawLine(
+                room.block[0][0].x,
+                room.block[room.worldHeight-1][0].y + room.blockSize,
+                room.block[0][room.worldWidth-1].x + room.blockSize,
+                room.block[room.worldHeight-1][0].y + room.blockSize); //draw the bottom line
 
-        room.draw(g);
+        room.draw(g); //draw the game room
+        store.draw(g); //draw the buttons
     }
 
     public void run() {

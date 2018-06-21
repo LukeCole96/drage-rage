@@ -6,7 +6,7 @@ import java.awt.*;
 public class Frame extends JFrame {
 
     public static String title = "Drage Rage";
-    public static Dimension size = new Dimension(650, 550);
+    public static Dimension size = new Dimension(700, 550);
 
 
     public Frame() {
@@ -25,7 +25,7 @@ public class Frame extends JFrame {
 
     public void init() {
         setLayout(new GridLayout(1,1,0,0));
-        Screen screen = new Screen();
+        Screen screen = new Screen(this);
         add(screen);
 
         setVisible(true);
