@@ -23,6 +23,9 @@ public class Screen extends JPanel implements Runnable {
     public static Store store;
     public static String missionPath = "src/main/GameEngine/gameUtilities/levels/mission1.level";
 
+    public static int coinCount = 10;
+    public static int health = 100;
+
     public static Point mse = new Point(0, 0);
     public static Image[] tileSet_ground = new Image[100];
     public static Image[] tileSet_air = new Image[100];
@@ -51,6 +54,9 @@ public class Screen extends JPanel implements Runnable {
         }
 
         tileSet_res[0] = new ImageIcon("src/resource/cell.png").getImage();
+        tileSet_res[1] = new ImageIcon("src/resource/health.png").getImage();
+        tileSet_res[2] = new ImageIcon("src/resource/coin.png").getImage();
+
         save.loadSave(new File(missionPath));
     }
 
