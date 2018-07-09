@@ -3,6 +3,7 @@ package main.GameEngine.scene;
 import main.GameEngine.gameUtilities.Save;
 import main.GameEngine.gameUtilities.controls.KeyHandle;
 import main.GameEngine.gameUtilities.controls.Store;
+import main.GameEngine.sprites.DrageMob;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,8 @@ public class Screen extends JPanel implements Runnable {
     public static Store store;
     public static String missionPath = "src/main/GameEngine/gameUtilities/levels/mission1.level";
 
+    public static DrageMob[] mobs = new DrageMob[100];
+
     public static int coinCount = 10;
     public static int health = 100;
 
@@ -30,6 +33,7 @@ public class Screen extends JPanel implements Runnable {
     public static Image[] tileSet_ground = new Image[100];
     public static Image[] tileSet_air = new Image[100];
     public static Image[] tileSet_res = new Image[100];
+    public static Image[] tileset_mob = new Image[100];
 
     public Thread thread = new Thread(this);
 
@@ -44,20 +48,27 @@ public class Screen extends JPanel implements Runnable {
         save = new Save();
         store = new Store();
 
-        for(int i=0; i<tileSet_ground.length; i++) {
+        for (int i = 0; i < tileSet_ground.length; i++) {
             tileSet_ground[i] = new ImageIcon("src/resource/tileset_ground.jpg").getImage();
-            tileSet_ground[i] = createImage(new FilteredImageSource(tileSet_ground[i].getSource(), new CropImageFilter(0, 26*i, 26, 26)));
+            tileSet_ground[i] = createImage(new FilteredImageSource(tileSet_ground[i].getSource(), new CropImageFilter(0, 26 * i, 26, 26)));
         }
-        for(int i=0; i<tileSet_air.length; i++) {
+        for (int i = 0; i < tileSet_air.length; i++) {
             tileSet_air[i] = new ImageIcon("/src/resource/tileSet_air.jpg").getImage();
-            tileSet_air[i] = createImage(new FilteredImageSource(tileSet_air[i].getSource(), new CropImageFilter(0, 26*i, 26, 26)));
+            tileSet_air[i] = createImage(new FilteredImageSource(tileSet_air[i].getSource(), new CropImageFilter(0, 26 * i, 26, 26)));
         }
 
         tileSet_res[0] = new ImageIcon("src/resource/cell.png").getImage();
         tileSet_res[1] = new ImageIcon("src/resource/health.png").getImage();
         tileSet_res[2] = new ImageIcon("src/resource/coin.png").getImage();
 
+        tileset_mob[0] = new ImageIcon("src/resource/drage_mob.png").getImage();
+
         save.loadSave(new File(missionPath));
+
+        for (int i = 0; i < mobs.length; i++) { //spawn mobs after resources are loaded.
+            mobs[i] = new DrageMob();
+            mobs[i].spawnMob(0);
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -79,6 +90,13 @@ public class Screen extends JPanel implements Runnable {
                 room.block[room.worldHeight-1][0].y + room.blockSize); //draw the bottom line
 
         room.draw(g); //draw the game room
+
+        for(int i=0; i < mobs.length; i++) {
+            if(mobs[i].inGame) {
+                mobs[i].draw(g);
+            }
+        }
+
         store.draw(g); //draw the buttons
     }
 

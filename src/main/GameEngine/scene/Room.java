@@ -23,7 +23,7 @@ public class Room {
 
         for(int y=0; y < block.length; y++) {
             for(int x=0; x < block[0].length; x++) {
-                block[y][x] = new Block(((Screen.myWidth/2) - (worldWidth * blockSize/2) + (x * blockSize)),
+                block[y][x] = new Block((Screen.myWidth/2) - ((worldWidth * blockSize)/2) + (x * blockSize),
                         y * blockSize, blockSize, blockSize, value.groundGrassBlock, value.airAirBlock);
             }
         }
