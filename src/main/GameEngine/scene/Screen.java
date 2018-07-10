@@ -1,5 +1,6 @@
 package main.GameEngine.scene;
 
+import main.GameEngine.gameObjects.Value;
 import main.GameEngine.gameUtilities.Save;
 import main.GameEngine.gameUtilities.controls.KeyHandle;
 import main.GameEngine.gameUtilities.controls.Store;
@@ -28,6 +29,8 @@ public class Screen extends JPanel implements Runnable {
 
     public static int coinCount = 10;
     public static int health = 100;
+    public int spawnTime = 2400, spawnFrame = 0; //for spawner class....
+
 
     public static Point mse = new Point(0, 0);
     public static Image[] tileSet_ground = new Image[100];
@@ -67,7 +70,6 @@ public class Screen extends JPanel implements Runnable {
 
         for (int i = 0; i < mobs.length; i++) { //spawn mobs after resources are loaded.
             mobs[i] = new DrageMob();
-            mobs[i].spawnMob(0);
         }
     }
 
@@ -96,12 +98,39 @@ public class Screen extends JPanel implements Runnable {
                 mobs[i].draw(g);
             }
         }
-
         store.draw(g); //draw the buttons
+    }
+
+
+    //spawner should be moved to its own class in refactor.
+
+    public void mobSpawner() {
+        if(spawnFrame >= spawnTime) {
+            for(int i=0; i < mobs.length; i++) {
+                if(!mobs[i].inGame) {
+                    mobs[i].spawnMob(Value.mobGreen);
+                    break;
+
+                }
+            }
+            spawnFrame = 0;
+        } else {
+            spawnFrame += 1;
+        }
     }
 
     public void run() {
         while (gameRun) {
+            if(!isFirst) {
+                room.physics();
+                mobSpawner();
+
+                for(int i=0; i < mobs.length; i++) {
+                    if(mobs[i].inGame) {
+                        mobs[i].physics();
+                    }
+                }
+            }
             repaint();
 
             try {
