@@ -37,6 +37,14 @@ public class DrageMob extends Rectangle {
         inGame = true;
     }
 
+    public void deleteMob() {
+        inGame = false;
+    }
+
+    public void loseHealth() {
+        Screen.health -= 1;
+    }
+
     public void physics() {
         if (walkFrame >= walkSpeed) {
             if(direction == moveRight) { //switch case could be better suited?
@@ -98,6 +106,11 @@ public class DrageMob extends Rectangle {
                             direction = moveLeft;
                         }
                     } catch (Exception ex) {}
+                }
+
+                if(Screen.room.block[coordinateY][coordinateX].airId == Value.airCave) {
+                    deleteMob();
+                    loseHealth();
                 }
 
                 mobWalkCounter = 0;

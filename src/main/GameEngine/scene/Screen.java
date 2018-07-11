@@ -52,11 +52,11 @@ public class Screen extends JPanel implements Runnable {
         store = new Store();
 
         for (int i = 0; i < tileSet_ground.length; i++) {
-            tileSet_ground[i] = new ImageIcon("src/resource/tileset_ground.jpg").getImage();
+            tileSet_ground[i] = new ImageIcon("src/resource/tileset_ground.png").getImage();
             tileSet_ground[i] = createImage(new FilteredImageSource(tileSet_ground[i].getSource(), new CropImageFilter(0, 26 * i, 26, 26)));
         }
         for (int i = 0; i < tileSet_air.length; i++) {
-            tileSet_air[i] = new ImageIcon("/src/resource/tileSet_air.jpg").getImage();
+            tileSet_air[i] = new ImageIcon("src/resource/tileset_air.png").getImage();
             tileSet_air[i] = createImage(new FilteredImageSource(tileSet_air[i].getSource(), new CropImageFilter(0, 26 * i, 26, 26)));
         }
 
