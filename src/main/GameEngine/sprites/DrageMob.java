@@ -38,6 +38,7 @@ public class DrageMob extends Rectangle {
     }
 
     public void deleteMob() {
+
         inGame = false;
     }
 

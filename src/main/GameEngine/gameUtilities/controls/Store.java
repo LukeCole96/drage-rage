@@ -19,8 +19,8 @@ public class Store {
     public Rectangle buttonHealth;
     public Rectangle buttonCoins;
 
-    public static String coinCountLabel = Integer.toString(Screen.coinCount);
-    public static String healthCountLabel = Integer.toString(Screen.health);
+//    public  String coinCountLabel = Integer.toString(Screen.coinCount);
+//    public  String healthCountLabel = Integer.toString(Screen.health);
 
 
     public Store() {
@@ -50,8 +50,8 @@ public class Store {
         g.drawImage(Screen.tileSet_res[2], buttonCoins.x, buttonCoins.y, buttonCoins.width, buttonCoins.height, null);
         g.setFont(new Font("Courier New", Font.BOLD, 14));
         g.setColor(new Color(255, 255, 255));
-        g.drawString(healthCountLabel, buttonHealth.x + buttonHealth.width + iconSpace, buttonHealth.y + iconTextY);
-        g.drawString(coinCountLabel, buttonCoins.x + buttonCoins.width + iconSpace, buttonCoins.y + iconTextY);
+        g.drawString("" + Screen.health, buttonHealth.x + buttonHealth.width + iconSpace, buttonHealth.y + iconTextY);
+        g.drawString("" + Screen.coinCount, buttonCoins.x + buttonCoins.width + iconSpace, buttonCoins.y + iconTextY);
 
 //        g.drawString(coinCountLabel, x, y);
 
