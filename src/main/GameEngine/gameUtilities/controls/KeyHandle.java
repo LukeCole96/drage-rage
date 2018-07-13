@@ -17,7 +17,7 @@ public class KeyHandle implements MouseMotionListener, MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-
+        Screen.store.click(e.getButton());
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -33,7 +33,7 @@ public class KeyHandle implements MouseMotionListener, MouseListener {
     }
 
     public void mouseDragged(MouseEvent e) {
-        screen.mse = new Point((e.getX()) + ((Frame.size.width - Screen.myWidth)/2), (e.getY()) + ((Frame.size.height - (Screen.myHeight)) - (Frame.size.width - Screen.myWidth)/2));
+        screen.mse = new Point((e.getX()) - ((Frame.size.width - Screen.myWidth)/2), (e.getY()) - ((Frame.size.height - (Screen.myHeight)) - (Frame.size.width - Screen.myWidth)/2));
     }
 
     public void mouseMoved(MouseEvent e) {
