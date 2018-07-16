@@ -16,6 +16,7 @@ public class Screen extends JPanel implements Runnable {
 
     public boolean gameRun = true;
     public static boolean isFirst = true;
+    public static boolean isDebug = true;
     public static int rpsFrame = 0;
     public static int fps = 100000;
     public static int myHeight;

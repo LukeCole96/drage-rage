@@ -16,9 +16,10 @@ public class Store {
     public static int iconTextY = 15;
     public static int itemIn = 4; //how big the item border is
     public static int heldID = -1;
-    public static int[] buttonID ={Value.airTowerLaser, Value.airAirBlock, Value.airAirBlock, Value.airAirBlock, Value.airAirBlock, Value.airAirBlock,
+    public static int realID = 0; //used to solve the issue regarding the coin transfer for towers.
+    public static int[] buttonID = {Value.airTowerLaser, Value.airAirBlock, Value.airAirBlock, Value.airAirBlock, Value.airAirBlock, Value.airAirBlock,
             Value.airAirBlock, Value.airTrashCan}; //the button menu drag and drop stuff (this is place holded).
-    public static int[] buttonPrice = {20, 0, 0, 0, 0, 0, 0, 0}; //place held
+    public static int[] buttonPrice = {10, 0, 0, 0, 0, 0, 0, 0}; //place held
 
 
     public Rectangle[] button = new Rectangle[shopWidth];
@@ -40,7 +41,22 @@ public class Store {
                             holdsItem = false;
                         } else {
                             heldID = buttonID[i];
+                            realID = i;
                             holdsItem = true;
+                        }
+                    }
+                }
+            }
+        }
+        if(holdsItem) { //purchasing
+            if(Screen.coinCount >= buttonPrice[realID]) {
+                for(int i=0; i < Screen.room.block.length; i++) {
+                    for (int y = 0; y < Screen.room.block[0].length; y++) {
+                        if (Screen.room.block[i][y].contains(Screen.mse)) {
+                            if (Screen.room.block[i][y].groundId != Value.groundRoad && Screen.room.block[i][y].airId == Value.airAirBlock) {
+                                Screen.room.block[i][y].airId = heldID;
+                                Screen.coinCount -= buttonPrice[realID];
+                            }
                         }
                     }
                 }

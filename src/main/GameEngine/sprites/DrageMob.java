@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class DrageMob extends Rectangle {
     public int coordinateX, coordinateY;
+    public int health;
+    public int healthSpaceFromMob = 3, healthHeight = 6;
     public int mobSize = 52; //Size of mob image based on room blockSize value (adjust later in refactoring).
     public int mobId = Value.mobAir;
     public boolean inGame = false;
@@ -34,16 +36,35 @@ public class DrageMob extends Rectangle {
         }
 
         this.mobId = mobId;
+        this.health = mobSize;
         inGame = true;
     }
 
     public void deleteMob() {
 
         inGame = false;
+        direction = moveRight;
+        mobWalkCounter = 0;
     }
 
-    public void loseHealth() {
-        Screen.health -= 1;
+    public void loseHealth(int amount) {
+        health -= amount;
+
+        checkDeath();
+    }
+
+    public void checkDeath() {
+        if(health == 0) {
+            deleteMob();
+        }
+    }
+
+    public boolean isDead() {
+        if(inGame) {
+            return false;
+        } else {
+            return true; //returns true means mob dead.
+        }
     }
 
     public void physics() {
@@ -111,7 +132,7 @@ public class DrageMob extends Rectangle {
 
                 if(Screen.room.block[coordinateY][coordinateX].airId == Value.airCave) {
                     deleteMob();
-                    loseHealth();
+                    loseHealth(1);
                 }
 
                 mobWalkCounter = 0;
@@ -129,5 +150,15 @@ public class DrageMob extends Rectangle {
 
     public void draw(Graphics g) {
         g.drawImage(Screen.tileset_mob[mobId], x, y, width, height, null);
+
+
+        //health bar
+        g.setColor(new Color(180, 50, 50));
+        g.fillRect(x, y  - (healthSpaceFromMob + healthHeight), width, healthHeight); //Create the mob health bar.
+
+        g.setColor(new Color(50, 180, 50));
+        g.fillRect(x, y  - (healthSpaceFromMob + healthHeight), health, healthHeight); //Create the mob health bar.
+        g.setColor(new Color(0, 0, 0));
+        g.drawRect(x, y  - (healthSpaceFromMob + healthHeight), health - 1, healthHeight - 1); //border lining of health.
     }
 }
