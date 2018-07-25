@@ -45,6 +45,7 @@ public class DrageMob extends Rectangle {
         inGame = false;
         direction = moveRight;
         mobWalkCounter = 0;
+        Screen.room.block[0][0].getMoney(mobId);
     }
 
     public void loseHealth(int amount) {

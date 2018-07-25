@@ -38,11 +38,10 @@ public class Block extends Rectangle {
             if (airId == Value.airTowerLaser) {
                 g.drawRect(towerLazerDistanceSquare.x, towerLazerDistanceSquare.y, towerLazerDistanceSquare.width, towerLazerDistanceSquare.height);
             }
-
-            if (isShooting) {
-                g.setColor(new Color(255, 255, 0));
-                g.drawLine(x + (width / 2), y + (height / 2), Screen.mobs[shotMob].x + (Screen.mobs[shotMob].width / 2), Screen.mobs[shotMob].y + (Screen.mobs[shotMob].height / 2));
-            }
+        }
+        if (isShooting) {
+            g.setColor(new Color(255, 255, 0));
+            g.drawLine(x + (width / 2), y + (height / 2), Screen.mobs[shotMob].x + (Screen.mobs[shotMob].width / 2), Screen.mobs[shotMob].y + (Screen.mobs[shotMob].height / 2));
         }
     }
 
@@ -67,7 +66,7 @@ public class Block extends Rectangle {
             }
         }
 
-        if (isShooting) { //deals wqith the shooting and health taking.
+        if (isShooting) { //deals with the shooting and health taking.
             if (loseFrame >= loseTime) {
                 Screen.mobs[shotMob].loseHealth(1);
                 loseFrame = 0;
@@ -76,9 +75,12 @@ public class Block extends Rectangle {
             }
 
             if (Screen.mobs[shotMob].isDead()) {
-                getMoney(Screen.mobs[shotMob].mobId);
                 isShooting = false;
                 shotMob = -1;
+
+                Screen.killed += 1;
+
+                Screen.hasWon();
             }
         }
     }

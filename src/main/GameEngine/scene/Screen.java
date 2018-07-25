@@ -16,7 +16,7 @@ public class Screen extends JPanel implements Runnable {
 
     public boolean gameRun = true;
     public static boolean isFirst = true;
-    public static boolean isDebug = true;
+    public static boolean isDebug = true; //used for box drawing params.
     public static int rpsFrame = 0;
     public static int fps = 100000;
     public static int myHeight;
@@ -24,7 +24,10 @@ public class Screen extends JPanel implements Runnable {
     public static Room room;
     public static Save save;
     public static Store store;
-    public static String missionPath = "src/main/GameEngine/gameUtilities/levels/mission1.level";
+    public static int killed = 0, killsToWin = 0, level = 1, maxLevel = 3; //game setting
+    public static boolean isWin = false;
+    public static int winTime = 4000, winFrame = 0;
+    public static String missionPath = "src/main/GameEngine/gameUtilities/levels/mission" + level + ".level";
 
     public static DrageMob[] mobs = new DrageMob[100];
 
@@ -52,6 +55,11 @@ public class Screen extends JPanel implements Runnable {
         save = new Save();
         store = new Store();
 
+        System.out.println(" forst  " + missionPath);
+
+        coinCount = 10; //restore after new level.
+        health = 100;
+
         for (int i = 0; i < tileSet_ground.length; i++) {
             tileSet_ground[i] = new ImageIcon("src/resource/tileset_ground.png").getImage();
             tileSet_ground[i] = createImage(new FilteredImageSource(tileSet_ground[i].getSource(), new CropImageFilter(0, 26 * i, 26, 26)));
@@ -67,6 +75,7 @@ public class Screen extends JPanel implements Runnable {
 
         tileset_mob[0] = new ImageIcon("src/resource/drage_mob.png").getImage();
 
+        System.out.println(missionPath);
         save.loadSave(new File(missionPath));
 
         for (int i = 0; i < mobs.length; i++) { //spawn mobs after resources are loaded.
@@ -109,6 +118,18 @@ public class Screen extends JPanel implements Runnable {
             g.setFont(new Font("Courier New", Font.BOLD, 14));
             g.drawString("Game Over", 10, 20);
         }
+
+        if(isWin) {
+            g.setColor(new Color(255, 255, 255));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(new Color(45, 14, 39));
+            g.setFont(new Font("Courier New", Font.BOLD, 14));
+            if (level == maxLevel) {
+                g.drawString("You won the whole game!", 10, 20);
+            } else {
+                g.drawString("You've won! Next level coming up...", 10, 20);
+            }
+        }
     }
 
 
@@ -131,16 +152,32 @@ public class Screen extends JPanel implements Runnable {
 
     public void run() {
         while (gameRun) {
-            if(!isFirst && health > 0) {
+            if (!isFirst && health > 0 && !isWin) {
                 room.physics();
                 mobSpawner();
 
-                for(int i=0; i < mobs.length; i++) {
-                    if(mobs[i].inGame) {
+                for (int i = 0; i < mobs.length; i++) {
+                    if (mobs[i].inGame) {
                         mobs[i].physics();
                     }
                 }
+            } else {
+                if (isWin) {
+                    if (winFrame >= winTime) { //add options etc for interface to restart game etc.
+                        if (level > maxLevel) {
+                            System.exit(0);
+                        } else {
+                            level += 1;
+                            define();
+                            isWin = false;
+                        }
+                        winFrame = 0;
+                    } else {
+                        winFrame += 1;
+                    }
+                }
             }
+
             repaint();
 
             try {
@@ -148,7 +185,14 @@ public class Screen extends JPanel implements Runnable {
             } catch (Exception ex) {
 
             }
+        }
+    }
 
+    public static void hasWon() {
+        if(killed == killsToWin) {
+            isWin = true;
+            killed = 0;
+            coinCount = 0;
         }
     }
 }
